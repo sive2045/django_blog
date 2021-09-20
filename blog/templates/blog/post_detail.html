@@ -45,7 +45,7 @@
                             <p>{{post.created_at}}</p>
                         </header>
                         <!-- Preview image figure-->
-                        <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
+                        <figure class="mb-4"><img class="img-fluid rounded" src="{{post.head_image.url}}" alt="..." /></figure>
                         <!-- Post content-->
                         <p>{{post.content}}
                     </article>
@@ -136,7 +136,7 @@
         </div>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; 이충녕 2021</p></div>
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
