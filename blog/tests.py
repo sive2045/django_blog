@@ -11,6 +11,23 @@ class TestView(TestCase):
         """
         self.client = Client()
 
+    def navbar_test(self, soup):
+        navbar = soup.nav
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About Me', navbar.text)
+
+        logo_btn = navbar.find('a', text='Do It Django')
+        self.assertIn(logo_btn.attrs['href'], '/')
+
+        home_btn = navbar.find('a', text='Home')
+        self.assertIn(home_btn.attrs['href'], '/')
+
+        blog_btn = navbar.find('a', text='Blog')
+        self.assertIn(blog_btn.attrs['href'], '/blog/')
+
+        about_me_btn = navbar.find('a', text='About Me')
+        self.assertIn(about_me_btn.attrs['href'], '/about_me/')
+
     def test_post_list(self):
         # 1.1 포스트 목록 페이지를 가져온다.
         response = self.client.get('/blog/')
@@ -20,10 +37,8 @@ class TestView(TestCase):
         soup = BeautifulSoup(response.content, 'html.parser')
         self.assertEqual(soup.title.text, 'Blog')
         # 1.4 내비게이션 bar가 있다.
-        navbar = soup.nav
         # 1.5 Blog, About Me라는 문구가 내비게이션 바에 있다.
-        self.assertIn('Blog', navbar.text)
-        self.assertIn('About Me', navbar.text)
+        self.navbar_test(soup)
 
         # 2.1 메인 영역에 게시물이 하나도 없다면
         self.assertEqual(Post.objects.count(), 0)
@@ -67,9 +82,7 @@ class TestView(TestCase):
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
         # 2.2 포스트 목록 페이지와 똑같은 내비게이션 바가 있다.
-        navbar = soup.nav
-        self.assertIn('Blog', navbar.text)
-        self.assertIn('About Me', navbar.text)
+        self.navbar_test(soup)
         # 2.3 첫 번째 포스터의 제목이 웹 브라우저 탭 타이틀에 있다.
         self.assertIn(post_001.title, soup.title.text)
         # 2.4 첫 번째 포스터 제목이 포스터 영역(post_area)에 있다.
