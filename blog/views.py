@@ -6,10 +6,6 @@ class PostList(ListView):
     ordering = '-pk'
 
     def get_context_data(self, **kwargs):
-        """
-        공부가 필요한 함수. 
-        꼭 추가적으로 공부하기.
-        """
         context = super(PostList, self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
@@ -19,3 +15,9 @@ class PostList(ListView):
 
 class PostDetail(DetailView):
     model = Post
+
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = Post.objects.filter(category=None).count()
+        return context
