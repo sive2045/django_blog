@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Category, Post
+from .models import Category, Post, Tag
 
 class PostList(ListView):
     model = Post
@@ -39,5 +39,20 @@ def category_page(request, slug):
             'categories' : Category.objects.all(),
             'no_category_post_count' : Post.objects.filter(category=None).count(),
             'category' : category,
+        }
+    )
+
+def tag_page(request, slug):
+    tag = Tag.objects.get(slug=slug)
+    post_list = tag.post_set.all() # 자식 모델을 사용할 때 쓰는 형식. [자식모델소문자]_set
+
+    return render(
+        request,
+        'blog/post_list.html',
+        {
+            'post_list' : post_list,
+            'tag' : tag,
+            'categories': Category.objects.all(),
+            'no_category_post_count': Post.objects.filter(category=None).count(),
         }
     )
