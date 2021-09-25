@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Category, Post, Tag
 
 class PostList(ListView):
@@ -30,7 +30,7 @@ class PostDetail(DetailView):
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
 
-class  PostCreate(LoginRequiredMixin, CreateView):
+class  PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     """
     post_form.html 필요
     author : 로그인 시 기입만 가능하므로 제외
@@ -42,9 +42,17 @@ class  PostCreate(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
 
+    def test_func(self):
+        """
+        권한 인증 관련 
+        장고에서 제공하는 함수?
+        이를 통해 유저중 특정 권한 유저들만 페이지 접근가능하게 설정 가능
+        """
+        return self.request.user.is_superuser or self.request.user.is_staff
+
     def form_valid(self, form):
         current_user = self.request.user
-        if current_user.is_authenticated: # 로그인 여부 조건문
+        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser): # 로그인 여부 조건문
             form.instance.author = current_user
             return super(PostCreate, self).form_valid(form)
         else:

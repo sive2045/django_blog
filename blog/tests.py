@@ -13,9 +13,11 @@ class TestView(TestCase):
         self.client = Client()
         self.user_sive = User.objects.create_user(username="sive", password="asdfqwer12")
         self.user_value = User.objects.create_user(username="value", password="asdfqwer12")
+        self.user_value.is_staff = True
+        self.user_value.save()
 
         self.category_programming = Category.objects.create(name='programming', slug='programming')
-        self.category_music = Category.objects.create(name='music', slug='music')
+        self.category_music = Category.objects.create(name='music', slug='music')        
 
         self.tag_python_kor = Tag.objects.create(name="파이썬 공부", slug="파이썬-공부")
         self.tag_ptyhon = Tag.objects.create(name='Python', slug='python')
@@ -177,9 +179,13 @@ class TestView(TestCase):
         response = self.client.get('/blog/create_post/')
         self.assertNotEqual(response.status_code, 200)
 
-        # 로그인을 한다
-        self.client.login(username='value', password='asdfqwer12')
+        # staff가 아닌 일반 유저가 로그인을 한다
+        self.client.login(username='sive', password='asdfqwer12')
+        response = self.client.get('/blog/create_post/')
+        self.assertNotEqual(response.status_code, 200)
 
+        # staff인 value가 로그인 한다
+        self.client.login(username='value', password='asdfqwer12')
         response = self.client.get('/blog/create_post/')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
