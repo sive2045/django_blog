@@ -1,8 +1,12 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Category, Post, Tag
 
 class PostList(ListView):
+    """
+    post_list.html 필요
+    """
     model = Post
     ordering = '-pk'
 
@@ -15,6 +19,9 @@ class PostList(ListView):
 
 
 class PostDetail(DetailView):
+    """
+    post_detail.html 필요
+    """
     model = Post
 
     def get_context_data(self, **kwargs):
@@ -22,6 +29,26 @@ class PostDetail(DetailView):
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         return context
+
+class  PostCreate(LoginRequiredMixin, CreateView):
+    """
+    post_form.html 필요
+    author : 로그인 시 기입만 가능하므로 제외
+    created_ad : 자동 기입
+    tag : 추가적으로 포스트에 기입
+
+    from_vaid() : CreateView의 매소드, 재정의해서 사용
+    """
+    model = Post
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated: # 로그인 여부 조건문
+            form.instance.author = current_user
+            return super(PostCreate, self).form_valid(form)
+        else:
+            return redirect('/blog/')
 
 def category_page(request, slug):
     if slug=='no_category': # no_category front에서 내가 지정한 slug임
