@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Category, Post, Tag
+from django.core.exceptions import PermissionDenied
 
 class PostList(ListView):
     """
@@ -58,7 +59,31 @@ class  PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         else:
             return redirect('/blog/')
 
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    """
+    수정 되는 메커니즘 이해하기.
+    """
+    model = Post
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category', 'tags']
+
+    template_name = 'blog/post_update_form.html' # 경로지정, 미지정시 모델이름_form.html로 감.
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        오버라이딩
+        유저가 일치해야 수정 가능함
+        """
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(PostUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
 def category_page(request, slug):
+    """
+    slug 데이터는 front에서 입력받아, url.py에서 넘겨 받음
+    no_category 와 같은 경우 프론트에서 새로 정의한 slug임
+    그 외에는 PostList에서 정의함
+    """
     if slug=='no_category': # no_category front에서 내가 지정한 slug임
         category='미분류'
         post_list = Post.objects.filter(category=None)
