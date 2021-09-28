@@ -82,7 +82,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
     수정 되는 메커니즘 이해하기.
     """
     model = Post
-    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category', 'tags']
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
 
     template_name = 'blog/post_update_form.html' # 경로지정, 미지정시 모델이름_form.html로 감.
 
@@ -95,6 +95,46 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
             return super(PostUpdate, self).dispatch(request, *args, **kwargs)
         else:
             raise PermissionDenied
+    
+    def get_context_data(self, **kwargs):
+        """
+        CBV로 뷰를 만들 때 
+        템플릿으로 추가 인자를 넘길 때 사용함
+        """
+        context = super(PostUpdate, self).get_context_data()
+        if self.object.tags.exists():
+            tags_str_list = list()
+            for t in self.object.tags.all():
+                tags_str_list.append(t.name)
+            context['tags_str_default'] = '; '.join(tags_str_list)
+
+        return context
+    
+    def form_valid(self, form):
+        """
+        이미 존재하는 tags를 제거하는 기능은 제공하지 않음
+        따라서 포스트의 태그를 애초에 비워두고 새로 들어온 값을
+        채우면 됌
+        """
+        response = super(PostUpdate, self).form_valid(form)
+        self.object.tags.clear() # 비우고 다 받음 됌
+
+        tags_str = self.request.POST.get('tags_str')
+        if tags_str:
+            tags_str = tags_str.strip() # strip() 공백 제거 
+            tags_str = tags_str.replace(',',';')
+            tags_list = tags_str.split(';')
+
+            for t in tags_list:
+                t = t.strip()
+                tag, is_tag_created = Tag.objects.get_or_create(name=t)
+                if is_tag_created:
+                    tag.slug = slugify(t, allow_unicode=True)
+                    tag.save()
+                self.object.tags.add(tag)
+        
+        return response
+
 
 def category_page(request, slug):
     """
