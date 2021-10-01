@@ -3,7 +3,9 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.text import slugify
 from .models import Category, Post, Tag
+from .forms import CommentForm
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404
 
 class PostList(ListView):
     """
@@ -15,7 +17,7 @@ class PostList(ListView):
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data()
         context['categories'] = Category.objects.all()
-        context['no_category_post_count'] = Post.objects.filter(category=None).count()
+        context['no_category_post_count'] = Post.objects.filter(category=None).count()        
         return context
         
 
@@ -30,6 +32,7 @@ class PostDetail(DetailView):
         context = super(PostDetail, self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
+        context['comment_form'] = CommentForm
         return context
 
 class  PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
@@ -174,3 +177,20 @@ def tag_page(request, slug):
             'no_category_post_count': Post.objects.filter(category=None).count(),
         }
     )
+
+def new_comment(request, pk):
+    if request.user.is_authenticated:
+        post = get_object_or_404(Post, pk=pk)
+
+        if request.method == 'POST':
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment = comment_form.save(commit=False) # 저장을 잠시 미룸
+                comment.post = post
+                comment.author = request.user
+                comment.save()
+                return redirect(comment.get_absolute_url())
+        else:
+            return redirect(post.get_absolute_url()) # get방식으로 접근한 경우 해당 post로 redirect처리
+    else:
+        raise PermissionDenied
