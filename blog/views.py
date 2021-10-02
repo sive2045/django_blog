@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.text import slugify
-from .models import Category, Post, Tag
+from .models import Category, Post, Tag, Comment
 from .forms import CommentForm
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
@@ -138,6 +138,21 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
         
         return response
 
+
+class CommentUpdate(LoginRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+
+    def dispatch(self, request, *args, **kwargs):
+        """
+        방문자의 요청이 GET인지 POST인지 판단함
+        인증 + 작성자만 수정 요청이 가능하도록 작성
+        """
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(CommentUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+    
 
 def category_page(request, slug):
     """
