@@ -11,6 +11,7 @@
 
     <h1>Blog{% if category %}&nbsp;<span class="badge badge-secondary">{{category}}</span>{% endif %}
     {% if tag %}<span class="badge badge-info"><i class="fas fa-tags"></i>{{tag}}({{tag.post_set.count}})</span>{% endif %}
+    {% if search_info %}<small class="text-muted">{{search_info}}</small>{% endif %}
     </h1>
         {% if post_list.exists %}
             {% for p in post_list %}

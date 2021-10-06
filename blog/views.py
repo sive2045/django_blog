@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.text import slugify
+from django.db.models import Q
 from .models import Category, Post, Tag, Comment
 from .forms import CommentForm
 from django.core.exceptions import PermissionDenied
@@ -154,6 +155,30 @@ class CommentUpdate(LoginRequiredMixin, UpdateView):
         else:
             raise PermissionDenied
     
+class PostSearch(PostList):
+    """
+    날짜 정렬 안됌
+    고쳐야함..
+    """
+    paginate_by = None
+
+    def get_queryset(self):
+        """
+        ListView에서 제공하는 함수
+        Q() 내부에 주목하자.
+        """
+        q = self.kwargs['q']
+        post_list = Post.objects.filter(
+            Q(title__contains=q) | Q(tags__name__contains=q)
+        ).distinct()
+        post_list.order_by('-updated_at')
+        return post_list
+    
+    def get_context_data(self, **kwargs):
+        context = super(PostSearch, self).get_context_data()
+        q = self.kwargs['q']
+        context['search_info'] = f'Search : {q} ({self.get_queryset().count()})'
+        return context
 
 def category_page(request, slug):
     """
