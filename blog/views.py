@@ -156,10 +156,6 @@ class CommentUpdate(LoginRequiredMixin, UpdateView):
             raise PermissionDenied
     
 class PostSearch(PostList):
-    """
-    날짜 정렬 안됌
-    고쳐야함..
-    """
     paginate_by = None
 
     def get_queryset(self):
@@ -171,7 +167,7 @@ class PostSearch(PostList):
         post_list = Post.objects.filter(
             Q(title__contains=q) | Q(tags__name__contains=q)
         ).distinct()
-        post_list.order_by('-updated_at')
+        post_list = post_list.order_by('-updated_at')
         return post_list
     
     def get_context_data(self, **kwargs):
