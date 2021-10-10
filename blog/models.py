@@ -76,3 +76,12 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return f'{self.post.get_absolute_url()}#comment-{self.pk}'
     
+    def get_avatar_url(self):
+        """
+        google로 로그인한 경우 해당 아바타를 가져옴.
+        """
+        if self.author.socialaccount_set.exists():
+            return self.author.socialaccount_set.first().get_avatar_url()
+        else:
+            return f'https://doitdjango.com/avatar/id/326/d933001656807a8f/svg/{self.author.email}'
+    
