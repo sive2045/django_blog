@@ -21,17 +21,20 @@
                     </div>
                     <div class="col-lg-6 mt-5">
                         <h2 class="text-light">Blog - Recent posts</h2>
-                        <div class="card mt-1">
-                            <div class="card-body">
-                                This is some text within a card body.
+                        {% for post in recent_posts %}
+                            <div class="card mt-1">
+                                <div class="card-body">
+                                    <h6><a href="{{post.get_absolute_url}}" class="text-decoration-none text-dark">{{post.title}}</a></h6>
+                                    <span class="badge badge-pill badge-light float-right">
+                                        <img class="mr-1 rounded-circle" width="20px" src="{{post.get_avatar_url}}" alt="{{post.author}}">
+                                        {{post.author.username}}
+                                        &nbsp;
+                                        &nbsp;
+                                        {{post.created_at}}
+                                    </sapn>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="card mt-1">
-                            <div class="card-body">
-                                This is some text within a card body.
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

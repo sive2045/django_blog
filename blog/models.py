@@ -62,6 +62,15 @@ class Post(models.Model):
         HTML로 변환해줌
         """
         return markdown(self.content)
+    
+    def get_avatar_url(self):
+        """
+        google로 로그인한 경우 해당 아바타를 가져옴.
+        """
+        if self.author.socialaccount_set.exists():
+            return self.author.socialaccount_set.first().get_avatar_url()
+        else:
+            return f'https://doitdjango.com/avatar/id/326/d933001656807a8f/svg/{self.author.email}'
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
