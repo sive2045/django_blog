@@ -9,6 +9,10 @@ __pycache__/
 # Django
 _media/
 
+# secret
+.env.prod
+.env.prod.db
+
 # Distribution / packaging
 .Python
 build/
