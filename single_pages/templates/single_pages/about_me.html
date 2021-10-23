@@ -3,7 +3,7 @@
 <html lang="ko">
     <head>
         <meta charset="UTF-8">
-        <title>About members</title>
+        <title>About Me</title>
 
         <link href="{% static 'blog/bootstrap/bootstrap.min.css'%}" rel="stylesheet" media="screen">
         <link rel="stylesheet" href="{% static 'single_pages/css/about_me.css' %}" media="screen">
@@ -16,28 +16,39 @@
             <div class="container mt-4">
                 <div class="row">
                     <div class="col-lg-8">
-                        <h1>안녕하세요, 카리나입니다.</h1>
-                        <br/>채워넣을 예정입니다.
+                        <h1>안녕하세요. 이충녕입니다.</h1>
+                        <br />
+                        <p class="lead">
+                            <h3>Interest</h3>
+                            <ul>
+                                <li>Machine Learning (reinforcement learning, mathematical optimization)</li>
+                                <li>Wireless Communication</li>
+                                <li>Back-End (data processing)</li>
+                            </ul>
+                            <br/>
+                            <h3>Education</h3>
+                            <ul>
+                                <li>Bachelor of Science in Electronic Engineering(EE), Korea Polytechnic University(2019.03~ )</li>
+                            </ul>
+                            <br/>
+                            <h3>Contact</h3>
+                            <ul>
+                                <li>e-mail : lc9902130509@kpu.ac.kr
+                            </ul>
+                        </p>
                     </div>
-                    <div class="col-lg-4">
-                        <img class="img-fluid" src="{% static 'single_pages/images/espa.jpg'%}"                        
+                    <div class="col-lg-4 margin-for-footer">
+                        <img class="img-fluid" src="{% static 'single_pages/images/me.jpg'%}">
+                        <br/><br/>
+                        <a href="https://github.com/sive2045" class="btn btn-primary btn-lg active" target='_blank' role="button" aria-pressed="true">Github</a>                   
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="bg-light margin-for-footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <h1>PORTFOLIO</h1>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <div class='fixed-bottom'>
-        {% include 'blog/footer.html' %}
+        <div class="fixed-bottom">
+            {% include 'blog/footer.html' %}
         </div>
 
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

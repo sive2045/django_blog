@@ -3,7 +3,7 @@
 <html lang="ko">
     <head>
         <meta charset="UTF-8">
-        <title>WiCola</title>
+        <title>C.Notebook</title>
 
         <link href="{% static 'blog/bootstrap/bootstrap.min.css'%}" rel="stylesheet" media="screen">
         <link rel="stylesheet" href="{% static 'single_pages/css/landing.css' %}" media="screen">
@@ -12,12 +12,12 @@
     <body>
 
         {% include 'blog/navbar.html' %}
-        <section>
+        <section class="margin-for-footer">
             <div class="container">
                 <div class="row justify-content-between">
                     <div class="col-lg-6 text-light">
-                        <h1 class="mt-5">WiCola</h1>
-                        <p>정보 통신의 최첨단 기술을 선도하는 WiCola 입니다.</p>
+                        <h1 class="mt-5">C.Notebook</h1>
+                        <p>제가 관심있고, 공부하는 것을 자유롭게 공유하는 곳입니다.</p>                        
                     </div>
                     <div class="col-lg-6 mt-5">
                         <h2 class="text-light">Blog - Recent posts</h2>
@@ -41,7 +41,7 @@
         </section>
 
         <div class='fixed-bottom'>
-        {% include 'blog/footer.html' %}
+            {% include 'blog/footer.html' %}
         </div>
 
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
