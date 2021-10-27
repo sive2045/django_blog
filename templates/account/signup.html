@@ -5,23 +5,23 @@
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-
 <div class="container" style="height:100vh">
     <div class="row justify-content-center h-100">
       <div class="col align-self-center border-success text-center card text-black my-3" style="max-width: 25rem;">
         <div class="card-header border-success bg-transparent"><h3>Sign Up</h3>
-              <p>Already have an account? Then please <a href="/accounts/login/">sign in</a>.</p></div>
+              Already have an account? Then please <a href="/accounts/login/">sign in</a>.
+              </div>
             <div class="card-body">                        
-              <br/>
-              <div class="ml-auto">
+              <div align="right">
                 <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
                   {% csrf_token %}                
                   {{ form.as_p }}
                     {% if redirect_field_value %}
                       <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                    {% endif %}                
+                    {% endif %}                               
                   <button class="btn btn-dark float-right" type="submit">Sign Up &raquo;</button>
                 </form>
+                <a class="button btn btn-primary float-left" href="/">Home</a>   
               </div>
             </div>
         </div>

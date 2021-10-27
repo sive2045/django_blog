@@ -14,8 +14,7 @@
         <div class="card-body">
         <h3 class="card-title">Log in by Username</h3><br/>
 
-          {% get_providers as socialaccount_providers %}
-
+          {% get_providers as socialaccount_providers %}          
           <form class="login" method="POST" action="{% url 'account_login' %}">
             {% csrf_token %}
             {{ form.as_p }}
@@ -29,10 +28,11 @@
           <div class="my-2">
           <a href="/accounts/signup/?process=login&{{ redirect_field_name }}={{ redirect_field_value }}" role="button" class="btn btn btn-light my-1" style="display:block"><i class="far fa-envelope"></i> Sign Up by Email</a>
           <a href="/accounts/google/login/?process=login&{{ redirect_field_name }}={{ redirect_field_value }}" role="button" class="btn btn btn-light my-1" style="display:block"><i class="fab fa-google"></i> Login with Google</a>
+          <a href="/" role="button" class="btn btn btn-light my-1" style="display:block"><i class="fa-solid fa-house-blank"></i> Go back home</a>
           </div>
           {% include "socialaccount/snippets/login_extra.html" %}
 
-          {% else %}
+          {% else %} 
           <p>{% blocktrans %}If you have not created an account yet, then please
           <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
           {% endif %}

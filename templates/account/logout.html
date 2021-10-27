@@ -9,7 +9,7 @@
 <div class="container" style="height:100vh">
     <div class="row justify-content-center h-100">
       <div class="col align-self-center border-success text-center card text-black my-3" style="max-width: 25rem;">
-        <div class="card-header  bg-transparent"><h3>Sign Out</h3>
+        <div class="card-header  bg-transparent"><h3>Log Out</h3>
               <p>Are you sure log out?                        
               <br/>
               <div class="ml-auto">
@@ -18,7 +18,8 @@
                   {% if redirect_field_value %}
                   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
                   {% endif %}
-                  <button class="btn btn-dark" type="submit">{% trans 'Sign Out' %}</button>
+                  <button class="btn btn-dark float-right" type="submit">{% trans 'Log Out' %}</button>
+                  <a class="button btn btn-secondary float-left" href="/">cancel</a>
                 </form>
               </div>            
         </div>
