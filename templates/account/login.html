@@ -12,7 +12,7 @@
       <div class="col align-self-center border-success text-center card text-black my-3" style="max-width: 25rem;">
         <div class="card-header border-success bg-transparent"><h1>BugsNotebook</h1></div>
         <div class="card-body">
-        <h3 class="card-title">Sign in by Username</h3><br/>
+        <h3 class="card-title">Log in by Username</h3><br/>
 
           {% get_providers as socialaccount_providers %}
 
@@ -22,7 +22,7 @@
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
-            <button class="btn btn-dark" type="submit">Sign In</button>
+            <button class="btn btn-dark" type="submit">Log in</button>
           </form>
           {% if socialaccount_providers %}
 
