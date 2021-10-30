@@ -38,6 +38,7 @@ else:
 INSTALLED_APPS = [
     'blog',
     'single_pages',
+    'todo',
 
     'crispy_forms',
     'markdownx',
