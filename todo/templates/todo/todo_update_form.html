@@ -3,7 +3,7 @@
 {% block head_title %}Create Todo{% endblock %}
 
 {% block main_area %}
-    <h1>Create New Todo</h1><hr/>
+    <h1>Edit Todo</h1><hr/>
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
         {{ form | crispy }}
         <button type="submit" class="btn btn-primary float-right">Submit</button><br/><br/>
