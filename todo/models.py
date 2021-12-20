@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdown
+from django.urls import reverse
 
 class Todo(models.Model):
     title = models.CharField(max_length=30)
@@ -26,3 +27,14 @@ class Todo(models.Model):
         HTML로 변환해줌
         """
         return markdown(self.content)
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    @property
+    def get_html_url(self):
+        url = reverse('todo:event_edit', args=(self.id,))
+        return f'<a href="{url}"> {self.title} </a>'
