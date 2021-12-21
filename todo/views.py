@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import DeleteView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.utils.safestring import mark_safe
 from django.views import generic
@@ -54,12 +55,13 @@ class TodoUpdate(LoginRequiredMixin, UpdateView):
         response = super(TodoUpdate, self).form_valid(form)
         return response
 
-class CalendarView(generic.ListView):
+class CalendarView(LoginRequiredMixin, generic.ListView):
     model = Event
     template_name = 'todo/calendar.html'
+    success_url = '/todo/calendar/'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(CalendarView, self).get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
@@ -87,6 +89,7 @@ def next_month(d):
     month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
     return month
 
+@login_required
 def event(request, event_id=None):
     instance = Event()
     if event_id:

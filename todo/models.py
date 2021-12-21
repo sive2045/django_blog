@@ -33,6 +33,7 @@ class Event(models.Model):
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     @property
     def get_html_url(self):
