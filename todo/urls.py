@@ -4,6 +4,7 @@ from . import views
 app_name = 'todo'
 urlpatterns = [
     path('', views.index),
+    path('list/',views.TodoList.as_view()),
     path('create_todo/', views.TodoCreate.as_view()),
     path('update_todo/<int:pk>/', views.TodoUpdate.as_view()),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),

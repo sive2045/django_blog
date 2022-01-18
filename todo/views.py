@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from django.views.generic import DeleteView, CreateView, UpdateView
+from django.views.generic import DeleteView, CreateView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -21,6 +21,11 @@ def index(request):
         request,
         'todo/base.html'
     )
+
+class TodoList(ListView):
+    model = Todo
+    ordering = '-pk'
+    paginate_by = 5
 
 class TodoCreate(LoginRequiredMixin, CreateView):
     model = Todo
