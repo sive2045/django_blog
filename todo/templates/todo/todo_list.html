@@ -10,12 +10,27 @@ Todo List
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                   <h5 class="card-title">{{t.title}}</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
+                  <p class="card-text">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input" id='is_done'>&nbsp;{{t.content}}
+                    </div>
+                  </p>
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
+    {% endif %}            
+{% endblock %}
+
+{% block script %}
+<script> 
+    $(document).ready(function(){
+        $("#is_done").change(function(){
+            if($("#is_done").is(":checked")){
+                alert("체크박스 체크했음!");
+            }else{
+                alert("체크박스 체크 해제!");
+            }
+        });
+    });
+</script>
 {% endblock %}
